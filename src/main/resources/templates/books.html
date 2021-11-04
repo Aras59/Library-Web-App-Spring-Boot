@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring_security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteka</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<style th:inline="text">
+        body{
+            color:white;
+        }
+		
+		li a {
+		  display: block;
+		  padding: 8px;
+		}
+    </style>
+</head>
+
+<body th:style="'background: url(/img/bg.png); background-repeat: no-repeat, repeat; background-size: 100% 100%;background-attachment: fixed;
+  background-position: center; '">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/books">System Biblioteczny</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div sec:authorize="isAuthenticated()">
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/addBooks">Dodaj książke! <span class="sr-only">(current)</span></a>
+                    </li>
+                </div>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/deleteUsers">Usuń lub edytuj użytkownika! <span class="sr-only">(current)</span></a>
+                    </li>
+                </div>
+                <div sec:authorize="hasRole('ROLE_USER')">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/myBooks">Twoje książki! <span class="sr-only">(current)</span></a>
+                    </li>
+                </div>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/logout">Wyloguj się! <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div sec:authorize="isAnonymous()">
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo04">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/login">Logowanie! <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <form action="/books" class="form-inline my-2 my-lg-0" style="position:absolute;right:0;">
+        <input class="form-control mr-sm-2" type="search" name="keyword" th:value="${keyword}" placeholder="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+</nav>
+
+
+
+
+    <div th:if="${param.errordata}">
+        <div class="alert alert-danger">Podany użytkownik juz istnieje!</div>
+    </div>
+    <div th:if="${param.error}">
+        <div class="alert alert-danger">Niepoprawne dane!</div>
+    </div>
+    <div th:if="${param.succes}">
+        <div class="alert alert-success">Udało się poprawnie zedytować użytkownika!</div>
+    </div>
+
+    
+
+    <div style="margin-left:150px;margin-top:100px;margin-right:150px;">
+		<h1>Dostępne książki</h1>
+        <table style="border:1px solid white;border-radius:2%;background-color:white;color:black;width:100%;font-size:28px;font-family:verdana;border-collapse: separate;
+  border-spacing: 10px 5px;">
+            <tr style="padding-bottom:10px;">
+                <th style="width:25%">Autor</th>
+                <th style="width:25%">Tytuł</th>
+                <th style="width:25%">Okładka</th>
+                <th style="width:25%;text-align:center;">Wypożycz</th>
+            </tr>
+            <tr th:each="Book: ${books}" style="padding-bottom:10px;">
+                <td th:text="${Book.getAuthor()}";>Autor:</td>
+                <td th:text="${Book.getTitle()}";></td>
+                <td>
+                    <a th:href="@{book/__${Book.getId}__}"><img th:src="@{'/img/'+${Book.getImg}}" width="100%" height="150"></a>
+                </td>
+                <td>
+                    <a th:href="@{buy/__${Book.getId}__}"><button class="btn btn-outline-success my-2 my-sm-0" align="center" style="margin-left:25%;" type="submit">Wypożycz</button></a>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+
+	
+
+<br>
+<br>
+<nav aria-label="Page navigation example" th:if="${books.totalPages > 1}"  >
+  <ul class="pagination justify-content-center" >
+	<li class="page-item" th:each="pageNumber : ${pageNumbers}">
+		<a class="page-link"  th:href="@{/books(size=${books.size}, page=${pageNumber})}" th:text=${pageNumber}></a>
+	</li>
+  </ul>
+</nav>
+
+
+<footer style="background-color:#f5f5f5;text-align:center;font-size:20px;position:relative;bottom: 0; width: 100%;height:100px;color:black;margin-top:50px;">
+  <p>Autor: Michał Walas</p>
+  <p>E-mail: michalwalas3@gmail.com</p>
+</footer>
+
+</body>
+</html>

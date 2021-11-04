@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Rejestracja</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style th:inline="text">
+        body{
+            background-color:#3e3e3e;
+            color:white;
+        }
+    </style>
+</head>
+<body th:style="'background: url(/img/bg.png); background-repeat: no-repeat, repeat; background-size: 100% 100%;background-attachment: fixed;
+  background-position: center; '">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/books">System Biblioteczny</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+
+<br>
+
+<div class="container" style="margin-left:20%;margin-right:20%;width:60%;">
+
+<form class="form-signin" method="post" th:action="@{/register}" th:object="${client}">
+    <h2 class="form-signin-heading">Rejestracja</h2>
+
+    <div th:if="${param.success}">
+        <div class="alert alert-info">Udało się poprawnie zarejestrować!</div>
+    </div>
+
+    <div th:if="${param.error}">
+        <div class="alert alert-danger">Podany użytkownik jest już zarejestrowany!</div>
+    </div>
+
+    <div th:if="${param.data}">
+        <div class="alert alert-danger">Błędne dane!</div>
+    </div>
+
+    <p>
+        <label for="username" class="sr-only">Nazwa Użytkownika</label>
+        <input type="text" th:field="*{Login}" id="username" name="username" class="form-control" placeholder="Nazwa Użytkownika" required="" autofocus="">
+    </p>
+    <p>
+        <label for="password" class="sr-only">Hasło</label>
+        <input type="password" th:field="*{Password}" id="password" name="password" class="form-control" placeholder="Hasło" required="">
+    </p>
+    <p>
+        <label for="name" class="sr-only">Imię i nazwisko</label>
+        <input type="text" th:field="*{Name}" id="name" name="name" class="form-control" placeholder="Imię i Nazwisko" required="">
+    </p>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Zarejestruj!</button>
+    <span><a href="/" th:href="@{/login}">Masz już konto? Zaloguj się! </a></span>
+</form>
+</div>
+
+
+</body>
+</html>

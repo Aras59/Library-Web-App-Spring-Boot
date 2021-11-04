@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring_security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteka</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style th:inline="text">
+        body{
+            color:white;
+        }
+    </style>
+</head>
+
+<body th:style="'background: url(/img/bg.png); background-repeat: no-repeat, repeat; background-size: 100% 100%;background-attachment: fixed;
+  background-position: center; '">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/books">System Biblioteczny</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div sec:authorize="isAuthenticated()">
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/addBooks">Dodaj książke! <span class="sr-only">(current)</span></a>
+                    </li>
+                </div>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/deleteUsers">Usuń lub edytuj użytkownika! <span class="sr-only">(current)</span></a>
+                    </li>
+                </div>
+                <div sec:authorize="hasRole('ROLE_USER')">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/myBooks">Twoje książki! <span class="sr-only">(current)</span></a>
+                    </li>
+                </div>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/logout">Wyloguj się! <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div sec:authorize="isAnonymous()">
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo04">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/login">Logowanie! <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <form class="form-inline my-2 my-lg-0" style="position:absolute;right:0;">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+</nav>
+
+
+    <div style="margin-left:15%;margin-top:100px;margin-right:10%;">
+        <table style="border-radius:2%;background-color:white;color:black;width:100%;font-size:26px;font-family:verdana;">
+            <th>
+                <a th:href="@{buy/__${Book.getId}__}"><button class="btn btn-outline-success my-2 my-sm-0" align="center" style="width:100%"type="submit">Wypożycz</button></a>
+            </th>
+            <th style="text-align:center">
+                Okładka
+            </th>
+            <tr>
+                <td>
+                    <table>
+                        <p style="margin-left:2%;">Autor:</p>
+                        <p style="margin-left:2%;" th:text="${Book.getAuthor}"></p>
+                        <p style="margin-left:2%;">Tytuł:</p>
+                        <p style="margin-left:2%;" th:text="${Book.getTitle}"></p>
+                        <p style="margin-left:2%;">Którki opis:</p>
+                        <p style="margin-left:2%;" th:text="${Book.getDescribe}"></p>
+                    </table>
+
+                </td>
+                <td>
+                    <img th:src="@{'/img/'+${Book.getImg}}" width="100%" height="350px">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+<footer style="background-color:#f5f5f5;text-align:center;font-size:20px;position:relative;bottom: 0; width: 100%;height:100px;color:black;margin-top:50px;">
+  <p>Autor: Michał Walas</p>
+  <p>E-mail: michalwalas3@gmail.com</p>
+</footer>
+
+
+</body>
+</html>
